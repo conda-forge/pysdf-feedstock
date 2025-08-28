@@ -10,8 +10,10 @@ source:
   sha256: d0639838ec3adcee3499d37290cda217fc1f0834e30a4167da04ae062087fa7b
 
 build:
-  number: 1
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  number: 2
+  script:
+    - set "CL=/FIchrono %CL%"  # [win]
+    - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   build:
