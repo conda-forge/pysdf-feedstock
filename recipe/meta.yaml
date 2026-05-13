@@ -10,7 +10,7 @@ source:
   sha256: d0639838ec3adcee3499d37290cda217fc1f0834e30a4167da04ae062087fa7b
 
 build:
-  number: 2
+  number: 3
   script:
     - set "CL=/FIchrono %CL%"  # [win]
     - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
@@ -34,6 +34,7 @@ requirements:
     - python
     - setuptools
   run:
+    - numpy
     - python
 
 test:
@@ -41,6 +42,7 @@ test:
     - pysdf
   commands:
     - pip check
+    - python run_test.py
   requires:
     - pip
 
