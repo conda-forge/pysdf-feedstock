@@ -37,7 +37,7 @@ requirements:
         - setuptools
         - wheel
   host:
-    - eigen
+    - eigen >=3.2,<5
     - pip
     - pybind11 >=2.5.0
     - python
