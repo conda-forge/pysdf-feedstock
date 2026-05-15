@@ -1,6 +1,7 @@
 --- a/setup.py
 +++ b/setup.py
-@@ -18,9 +18,17 @@ def find_eigen(min_ver=(3, 2, 0)):
+@@ -20,7 +20,15 @@
+ def find_eigen(min_ver=(3, 2, 0)):
      """Helper to find or download the Eigen C++ library"""
      import re, os
 +    conda_include_paths = []
@@ -15,6 +16,46 @@
          '/usr/include/eigen3',
          '/usr/local/include/eigen3',
          os.path.expanduser('~/.local/include/eigen3'),
-         'C:/Program Files/eigen3',
-         'C:/Program Files (x86)/eigen3',
-     ]
+@@ -48,7 +56,7 @@
+                     major_ver = int(line[len(MAJOR_VER_STR):])
+                 elif line.startswith(MINOR_VER_STR):
+                     minor_ver = int(line[len(MAJOR_VER_STR):])
+-            if not world_ver or not major_ver or not minor_ver:
++            if world_ver is None or major_ver is None or minor_ver is None:
+                 print('Failed to parse macros file', macros_path)
+             else:
+                 ver = (world_ver, major_ver, minor_ver)
+@@ -62,30 +70,9 @@
+                     break
+ 
+     if eigen_path is None:
+-        try:
+-            import urllib.request
+-            print("Couldn't find Eigen locally, downloading...")
+-            req = urllib.request.Request(
+-                EIGEN_WEB_URL,
+-                data=None,
+-                headers={
+-                    'User-Agent':
+-                    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36'
+-                })
+-
+-            with urllib.request.urlopen(req) as resp,\
+-                  open(TMP_EIGEN_FILE, 'wb') as file:
+-                data = resp.read()
+-                file.write(data)
+-            import tarfile
+-            tar = tarfile.open(TMP_EIGEN_FILE)
+-            tar.extractall()
+-            tar.close()
+-
+-            eigen_path = TMP_EIGEN_DIR
+-            os.remove(TMP_EIGEN_FILE)
+-        except:
+-            print('Download failed, failed to find Eigen')
++        raise RuntimeError(
++            'Failed to find Eigen headers. Install conda-forge eigen in the host env.'
++        )
+ 
+     if eigen_path is not None:
+         print('Found eigen at', eigen_path)
