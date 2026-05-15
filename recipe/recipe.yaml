@@ -1,0 +1,74 @@
+schema_version: 1
+
+context:
+  name: pysdf
+  version: "0.1.9"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/${{ name }}-${{ version }}.tar.gz
+  sha256: d0639838ec3adcee3499d37290cda217fc1f0834e30a4167da04ae062087fa7b
+  patches:
+    - search-conda-eigen-prefix.patch
+
+build:
+  number: 4
+  script:
+    - if: win
+      then: set "CL=/FIchrono %CL%" && python -m pip install . -vv --no-deps --no-build-isolation
+    - if: unix
+      then: python -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  build:
+    - ${{ compiler("c") }}
+    - ${{ compiler("cxx") }}
+    - ${{ stdlib("c") }}
+    - if: build_platform != target_platform
+      then:
+        - cross-python_${{ target_platform }}
+        - packaging
+        - pip
+        - pybind11 >=2.5.0
+        - python
+        - setuptools
+        - wheel
+  host:
+    - eigen >=3.2,<5
+    - pip
+    - pybind11 >=2.5.0
+    - python
+    - setuptools
+    - wheel
+  run:
+    - numpy
+    - python
+
+tests:
+  - python:
+      imports:
+        - pysdf
+  - script:
+      - pip check
+      - python run_test.py
+    files:
+      recipe:
+        - run_test.py
+    requirements:
+      run:
+        - pip
+        - python
+
+about:
+  homepage: https://github.com/sxyu/sdf
+  repository: https://github.com/sxyu/sdf
+  summary: Parallelized triangle mesh --> continuous signed distance field on CPU
+  license: BSD-2-Clause
+  license_file: LICENSE.txt
+
+extra:
+  recipe-maintainers:
+    - jeongseok-meta
