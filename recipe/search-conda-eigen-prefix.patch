@@ -1,0 +1,20 @@
+--- a/setup.py
++++ b/setup.py
+@@ -18,9 +18,17 @@ def find_eigen(min_ver=(3, 2, 0)):
+     """Helper to find or download the Eigen C++ library"""
+     import re, os
++    conda_include_paths = []
++    for prefix_var in ("PREFIX", "LIBRARY_PREFIX"):
++        prefix = os.environ.get(prefix_var)
++        if prefix:
++            conda_include_paths.append(os.path.join(prefix, "include", "eigen3"))
++
++    # Prefer conda-forge's eigen package and avoid upstream's network fallback.
+     try_paths = [
++        *conda_include_paths,
+         '/usr/include/eigen3',
+         '/usr/local/include/eigen3',
+         os.path.expanduser('~/.local/include/eigen3'),
+         'C:/Program Files/eigen3',
+         'C:/Program Files (x86)/eigen3',
+     ]
