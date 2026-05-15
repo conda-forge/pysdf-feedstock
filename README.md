@@ -9,6 +9,8 @@ Package license: BSD-2-Clause
 
 Summary: Parallelized triangle mesh --> continuous signed distance field on CPU
 
+Development: https://github.com/sxyu/sdf
+
 Current build status
 ====================
 
