@@ -15,7 +15,7 @@ source:
     - search-conda-eigen-prefix.patch
 
 build:
-  number: 4
+  number: 5
   script:
     - if: win
       then: set "CL=/FIchrono %CL%" && python -m pip install . -vv --no-deps --no-build-isolation
